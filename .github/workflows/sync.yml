@@ -1,0 +1,43 @@
+name: Production sync branch scope
+'on': workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: master
+        persist-credentials: false
+    - name: Verify frozen sources
+      run: python3 lab/verify-snapshot.py
+    - uses: actions/setup-go@v5
+      with:
+        go-version: 1.24.x
+    - name: Compile unmodified production program
+      working-directory: sources/action-sync
+      run: go build -o "$RUNNER_TEMP/action-sync" .
+    - name: Configure temporary test SSH identity
+      env:
+        TEST_SYNC_KEY: ${{ secrets.TEST_SYNC_KEY }}
+        GH_TOKEN: ${{ github.token }}
+      run: 'umask 077
+
+        printf ''%s\n'' "$TEST_SYNC_KEY" > "$RUNNER_TEMP/sync_key"
+
+        gh api meta --jq ''.ssh_keys[] | "github.com " + .'' > "$RUNNER_TEMP/sync_known_hosts"
+
+        echo "GIT_SSH_COMMAND=ssh -i $RUNNER_TEMP/sync_key -o IdentitiesOnly=yes -o UserKnownHostsFile=$RUNNER_TEMP/sync_known_hosts"
+        >> "$GITHUB_ENV"
+
+        git config --global user.name ''Workflow Review''
+
+        git config --global user.email ''review@example.invalid''
+
+        '
+    - name: Run real SSH sync with legacy and correct rules
+      run: '"$RUNNER_TEMP/action-sync" -files=sync-config.json -message="test: demonstrate branch scope"'
+    - name: Remove runner key
+      if: always()
+      run: rm -f "$RUNNER_TEMP/sync_key" "$RUNNER_TEMP/sync_known_hosts"

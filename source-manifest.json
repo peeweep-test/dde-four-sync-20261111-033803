@@ -1,0 +1,16 @@
+{
+  "notes": [
+    "Sources copied from the current local working tree on 2026-11-11.",
+    "Coordinator execution changes only the member organization to peeweep-test.",
+    "Guard execution changes only the coordinator repository address; observation gates surround unchanged validation/final publication steps.",
+    "Coordinator uses the test repository GITHUB_TOKEN instead of production App credentials.",
+    "Member dispatch entries are fixtures; member changelog PRs are made by the external driver."
+  ],
+  "sha256": {
+    "sources/action-sync/go.mod": "e9cb83ddb37f1eca81b30c9d9e04afd6a2c1968657510712c7b35883ba49948f",
+    "sources/action-sync/main.go": "312d3bac2bd385f6541cdc492ce985bd619b776b4d24602962bae8a9be4df747",
+    "sources/sync-baseline.yml": "0e83dfc36abc075fc70dc87e1832dab71dfe39358f46d3dcb83a735264abffbe",
+    "sources/verify-group-version.yml": "a2729d829da7b5260b39cf7f555ed3a0fdef5b9391064307b871dae98d1db23a",
+    "lab/coordinator.py": "43722bb840f63f820b1a960ca2767a713817c28613b8fc0737e0a80dd0635084"
+  }
+}

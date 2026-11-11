@@ -1,0 +1,16 @@
+[
+  {
+    "branch": [
+      "master"
+    ],
+    "src": "templates/legacy.yml",
+    "dest": "peeweep-test/dde-four-sync-20261111-033803/.github/workflows/legacy-scope.yml"
+  },
+  {
+    "branches": [
+      "master"
+    ],
+    "src": "templates/correct.yml",
+    "dest": "peeweep-test/dde-four-sync-20261111-033803/.github/workflows/correct-scope.yml"
+  }
+]
